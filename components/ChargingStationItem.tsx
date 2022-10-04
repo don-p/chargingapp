@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import { styles } from "../App";
 import { startCharging } from "../services";
 import type { StationLocationData } from "../services";
+import { useState } from "react";
 /**
  * A charging station item in the list view.
  */
@@ -9,8 +10,11 @@ type Props = {
   stationItem: StationLocationData;
 };
 export const ChargingStationItem: React.FC<Props> = ({ stationItem }) => {
+  const [charging, setCharging] = useState(false);
+
   const startChargingSession = () => {
     startCharging(stationItem.ID, 123, 456);
+    setCharging(true);
   };
   return (
     <View style={styles.container}>
@@ -27,7 +31,11 @@ export const ChargingStationItem: React.FC<Props> = ({ stationItem }) => {
       <View>
         <TouchableOpacity
           onPress={startChargingSession}
-          style={{ backgroundColor: "blue", padding: "8px" }}
+          style={{
+            backgroundColor: charging ? "#ccc" : "blue",
+            padding: "8px",
+          }}
+          disabled={charging}
         >
           <Text
             style={{
@@ -37,7 +45,7 @@ export const ChargingStationItem: React.FC<Props> = ({ stationItem }) => {
               textAlign: "center",
             }}
           >
-            Charge Now
+            {!charging ? "Charge Now" : "charging..."}
           </Text>
         </TouchableOpacity>
       </View>
