@@ -1,25 +1,40 @@
 import { StatusBar } from "expo-status-bar";
 
-import { getChargingLocations } from "./services";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { StationsList } from "./components/StationsList";
 import { Main } from "./components/Main";
+import { Provider, useSelector } from "react-redux";
+import store from "./store/store";
+import { StationDetail } from "./components/StationDetail";
+import { getChargingStations, getSelectedStation } from "./store/selectors";
 
-export default function App() {
-  const [view, setView] = useState<string>("MAIN");
+const AppComponent = () => {
+  const chargingStations = useSelector(getChargingStations);
+  const selectedChargingStation = useSelector(getSelectedStation);
 
   return (
     <View style={styles.container}>
-      {view === "MAIN" ? (
+      {!chargingStations && (
         // landing view
-        <Main setView={setView} />
-      ) : (
+        <Main />
+      )}
+      {!!chargingStations && !selectedChargingStation && (
         // charging station list view
-        <StationsList setView={setView} />
+        <StationsList />
+      )}
+      {!!selectedChargingStation && (
+        // charging station detail view
+        <StationDetail selectedChargingStation={selectedChargingStation} />
       )}
       <StatusBar style="auto" />
     </View>
+  );
+};
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppComponent />
+    </Provider>
   );
 }
 

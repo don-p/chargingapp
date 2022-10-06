@@ -1,8 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-// import { styles } from "../App";
+import { StyleSheet, Text, View } from "react-native";
 import { startCharging } from "../services";
 import type { StationLocationData } from "../services";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {} from "../store/selectors";
+import { SELECT_STATION } from "../store/actions";
+
 /**
  * A charging station item in the list view.
  */
@@ -10,14 +13,18 @@ type Props = {
   stationItem: StationLocationData;
 };
 export const ChargingStationItem: React.FC<Props> = ({ stationItem }) => {
-  const [charging, setCharging] = useState(false);
+  const dispatch = useDispatch();
 
-  const startChargingSession = () => {
-    startCharging(stationItem.ID, 123, 456);
-    setCharging(true);
+  const selectStation = () => {
+    dispatch({ type: SELECT_STATION, chargingStation: stationItem });
   };
+
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onClick={selectStation}
+      onTouchStart={selectStation}
+    >
       <View style={{ flex: 1 }}>
         <Text style={styles.header}>{stationItem.AddressInfo.Title}</Text>
         <Text style={styles.body}>{stationItem.AddressInfo.AddressLine1}</Text>
@@ -27,27 +34,6 @@ export const ChargingStationItem: React.FC<Props> = ({ stationItem }) => {
         <Text style={styles.body}>{`${stationItem.AddressInfo.Distance.toFixed(
           1
         )} miles`}</Text>
-      </View>
-      <View>
-        <TouchableOpacity
-          onPress={startChargingSession}
-          style={{
-            backgroundColor: charging ? "#ccc" : "blue",
-            padding: "8px",
-          }}
-          disabled={charging}
-        >
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: "bold",
-              color: "#fff",
-              textAlign: "center",
-            }}
-          >
-            {!charging ? "Charge Now" : "charging..."}
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

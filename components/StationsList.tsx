@@ -1,25 +1,15 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getChargingLocations, DEFAULT_GEOLOCATION } from "../services";
-import { useEffect, useState } from "react";
+import { Text, View } from "react-native";
 import { styles } from "../App";
 import { ChargingStationItem } from "./ChargingStationItem";
 import type { StationLocationData } from "../services";
+import { useSelector } from "react-redux";
+import { getChargingStations } from "../store/selectors";
+
 /**
  * The app charging station list view.
  */
-export const StationsList = ({ setView }) => {
-  const [chargingStationData, setChargingStationData] = useState<Array<any>>();
-
-  const getChargingStations = () => {
-    getChargingLocations(DEFAULT_GEOLOCATION).then((data) => {
-      setChargingStationData(data);
-    });
-  };
-
-  useEffect(() => {
-    // On load of the view, get the list of charging stations and store in local view state.
-    getChargingStations();
-  }, []);
+export const StationsList = () => {
+  const chargingStationData = useSelector(getChargingStations);
 
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>

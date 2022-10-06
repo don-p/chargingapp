@@ -18,5 +18,5 @@ The app displays a welcome screen and a screen that lists charging stations in a
 
 1. Rather than using the device Location functionality, the selected location for finding charging stations is hard-coded to the geolocation of my home address, in the constant `DEFAULT_GEOLOCATION`.
 1. Errors from API requests are caught and thrown, rather than displaying a user-friendly error message, using a Toast component or something similar.
-1. There is no application routing implemented, and a simple toggle between two screens is done using a top-level state variable.
+1. There is no application routing implemented, and view visibility/switching is based on the state of Redux state values - a list of chargers is available, a charging station is selected, etc.
 1. There is no unit or feature-level testing.
